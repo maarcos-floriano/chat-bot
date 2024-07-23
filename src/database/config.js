@@ -1,10 +1,10 @@
 var mysql = require('mysql2');
 
 var mySqlConfig = {
-  host: 'localhost',
-  database: 'chat',
-  user: 'root',
-  password: 'Marcos2003#$',
+  host: process.env.DB_HOST || 'localhost',
+  database:   process.env.DB_DATABASE || 'banco',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
   port: 3306
 };
 
@@ -15,6 +15,7 @@ function execute(query){
       if (error) {
         reject(error);
       }
+      console.log(results);
       resolve(results);
     });
     connection.end();

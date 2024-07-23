@@ -16,7 +16,7 @@ function findByUserEmail(email) {
 
 // Buscar transações por tipo de transação
 function findByType(type) {
-  var query = `SELECT * FROM transacoes WHERE tipo_transacao = '${tipo_transacao}' AND conta_id = (SELECT conta_id FROM contas WHERE numero_conta = '${valor}');`
+  var query = `SELECT * FROM transacoes WHERE tipo_transacao = '${tipo_transacao}' AND conta_id = (SELECT conta_id FROM contas WHERE numero_conta = '${type}');`
   return database.execute(query);
 }
 
