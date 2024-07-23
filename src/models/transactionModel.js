@@ -1,4 +1,4 @@
-var database = require("../config/database");
+var database = require("../database/config");
 
 // Buscar transações de uma conta
 function findByAccountNumber(accountNumber) {
@@ -22,6 +22,6 @@ function findByType(type) {
 
 module.exports = {
   findByAccountNumber,
-  findByUser,
+  findByUserEmail,
   findByType
 };
