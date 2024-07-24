@@ -66,8 +66,45 @@ function checkBalance(req, res) {
     });
 }
 
+function createAccount(req, res) {
+  
+    var user = req.body;
+  
+    accountModel.createAccount(user)
+      .then((result) => {
+  
+        res.status(201).send('Conta criada com sucesso!');
+  
+      })
+      .catch((error) => {
+  
+        res.status(500).send('Erro ao criar conta: ' + error);
+  
+      });
+  }
+
+  function updateBalance(req, res) {
+  
+    var accountNumber = req.params.accountNumber;
+    var value = req.body.value;
+  
+    accountModel.updateBalance(accountNumber, value)
+      .then((result) => {
+  
+        res.status(200).send('Saldo atualizado com sucesso!');
+  
+      })
+      .catch((error) => {
+  
+        res.status(500).send('Erro ao atualizar saldo: ' + error);
+  
+      });
+  }
+
 module.exports = {
   findByAccountNumber,
   findAllByUserEmail,
-  checkBalance
+  checkBalance,
+  createAccount,
+  updateBalance
 };
