@@ -24,16 +24,19 @@ function detailByPhone(phone){
   return database.execute(query);
 }
 
+// Criar usuário
 function create(user){
   var query = `INSERT INTO usuarios (nome, email, telefone, senha) VALUES ('${user.name}', '${user.email}', '${user.phone}', '${user.password}');`
   return database.execute(query);
 }
 
+// Atualizar usuário
 function update(user){
   var query = `UPDATE usuarios SET nome = '${user.name}', email = '${user.email}', telefone = '${user.phone}', senha = '${user.password}' WHERE id = ${user.id};`
   return database.execute(query);
 }
 
+// Remover usuário
 function remove(id){
   var query = `DELETE FROM usuarios WHERE id = ${id};`
   return database.execute(query);
