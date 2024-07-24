@@ -19,4 +19,17 @@ router.get('/detailByPhone/:phone', (req, res) =>{
   userController.detailByPhone(req, res);
 });
 
+router.post('/create', (req, res) =>{
+  userController.create(req, res);
+});
+
+
+router.put('/update', (req, res) =>{
+  userController.update(req, res);
+});
+
+router.delete('/remove/:id', (req, res) =>{
+  userController.remove(req, res);
+});
+
 module.exports = router;

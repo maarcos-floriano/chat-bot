@@ -25,6 +25,9 @@ app.use('/account', accountRoute);
 const transactionRoute = require('./src/routes/transactionRoute');
 app.use('/transaction', transactionRoute);
 
+const chatRoute = require('./src/routes/chatRoute');
+app.use('/chat', chatRoute);
+
 app.listen(porta, () => {
     console.log(`Servidor rodando em http://localhost:${porta}`);
 });
