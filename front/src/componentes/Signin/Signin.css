@@ -3,7 +3,8 @@
     flex-flow: column;
     align-items: center;
 
-    background: rgba(147, 129, 223, 0.58);
+    background-color: rgb(16, 16, 16);
+    /* background: rgba(147, 129, 223, 0.58); */
     
     width: 50%;
     max-width: 500px;
