@@ -71,9 +71,9 @@ CREATE TABLE IF NOT EXISTS mensagens (
 );
 
 INSERT INTO usuarios (nome, email, senha, cpf, telefone, endereco, data_nascimento) VALUES
-('João Silva', 'joao.silva@example.com', 'senha123', '11999999999', 'Rua A, 123', '1990-01-01'),
-('Maria Oliveira', 'maria.oliveira@example.com', 'senha456', '21999999999', 'Rua B, 456', '1985-05-05'),
-('Carlos Souza', 'carlos.souza@example.com', 'senha789', '31999999999', 'Rua C, 789', '1992-03-03');
+('João Silva', 'joao.silva@example.com', 'senha123', 12345678901, '11999999999', 'Rua A, 123', '1990-01-01'),
+('Maria Oliveira', 'maria.oliveira@example.com', 'senha456', 98765432100, '21999999999', 'Rua B, 456', '1985-05-05'),
+('Carlos Souza', 'carlos.souza@example.com', 'senha789', 45678912345, '31999999999', 'Rua C, 789', '1992-03-03');
 
 INSERT INTO contas (usuario_id, numero_conta, tipo_conta, saldo, data_abertura) VALUES
 (1, '123456-7', 'corrente', 1500.00, '2020-01-01'),

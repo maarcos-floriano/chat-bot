@@ -13,7 +13,7 @@ services:
       - network-node-db
 
   node-app:
-    image: santthiago/chatbot-node:latest
+    image: marcosfloriano/chat-bot:latest
     container_name: chatBot-node
     ports:
       - "8080:8080"
