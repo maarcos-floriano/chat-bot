@@ -11,6 +11,10 @@ router.get('/detailByEmail/:email', (req, res) =>{
   userController.detailByEmail(req, res);
 });
 
+router.get('/detailByCpf/:cpf', (req, res) =>{
+  userController.detailByCPF(req, res);
+});
+
 router.get('/detailById/:id', (req, res) =>{
   userController.detailById(req, res);
 });

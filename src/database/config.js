@@ -2,7 +2,7 @@ var mysql = require('mysql2');
 
 var mySqlConfig = {
   host: process.env.DB_HOST || 'localhost',
-  database:   process.env.DB_DATABASE || 'banco',
+  database: process.env.DB_DATABASE || 'banco',
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   port: 3306

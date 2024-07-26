@@ -1,0 +1,33 @@
+services:
+  mysql-db:
+    image: santthiago/chatbot-db:latest
+    container_name: chatBot-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ROOT123
+      MYSQL_DATABASE: banco_mock
+      MYSQL_USER: novo_usuario
+      MYSQL_PASSWORD: senha_segura
+    networks:
+      - network-node-db
+
+  node-app:
+    image: santthiago/chatbot-node:latest
+    container_name: chatBot-node
+    ports:
+      - "8080:8080"
+    environment:
+      APP_PORT: 8080
+      DB_HOST: mysql-db
+      DB_DATABASE: banco_mock
+      DB_USER: novo_usuario
+      DB_PASSWORD: senha_segura
+    depends_on:
+      - mysql-db
+    networks:
+      - network-node-db
+
+networks:
+  network-node-db:
+    driver: bridge

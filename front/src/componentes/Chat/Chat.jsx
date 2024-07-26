@@ -52,6 +52,11 @@ function Chat({ id }) {
         setResponse('');
     }
 
+    const obterUsuario = () => {
+        const url = 'http://localhost:5050/user'
+        consultaBanco()
+    }
+
     const solicitar = () => {
         const regexEmail = /^[a-zA-Z]+[^@]*@[a-zA-Z]+[^@]*\.[a-zA-Z]+[^@]*$/
         const regexCpf = /^\d{11}$/;
@@ -112,8 +117,20 @@ function Chat({ id }) {
             ...prevMessages,
             { sender: 'client', text: option}
         ]);
+        setResponse(option);
 
         reset();
+    }
+
+    
+    const consultaBanco = (url, methodo, data) => {
+        return fetch(url, {
+            method: methodo,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        }).then(response => response.json());
     }
 
     return (
@@ -131,7 +148,7 @@ function Chat({ id }) {
                             {
                                 Array.isArray(msg.text) ? (
                                     msg.text.map((option, idx) => (
-                                        <span key={idx} onClick={e => selectOption(e) &&setResponse(e.target.title)} className="spanLink" title={option}>
+                                        <span key={idx} className="spanLink" title={option} onClick={e => selectOption(e)}>
                                             {option}
                                             {idx < msg.text.length - 1 && <br />}
                                         </span>

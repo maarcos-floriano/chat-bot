@@ -22,6 +22,27 @@ function login(req, res) {
     });
 }
 
+function detailByCPF(req, res) {
+
+  var cpf = req.params.cpf;
+
+  userModel.detailByCPF(cpf)
+    .then((result) => {
+
+      if (result.length > 0) {
+        res.status(200).send(result);
+      } else {
+        res.status(404).send('Usuário não encontrado!');
+      }
+
+    })
+    .catch((error) => {
+
+      res.status(500).send('Erro ao buscar usuário: ' + error);
+
+    });
+}
+
 function detailByEmail(req, res) {
 
   var email = req.params.email;
@@ -149,6 +170,7 @@ function remove(req, res) {
 
 module.exports = {
   login,
+  detailByCPF,
   detailByEmail,
   detailById,
   detailByPhone,

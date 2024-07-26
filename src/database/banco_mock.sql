@@ -2,6 +2,16 @@
 
 -- Cria o banco de dados
 CREATE DATABASE IF NOT EXISTS banco_mock;
+
+-- Cria um novo usuário
+CREATE USER 'novo_usuario'@'localhost' IDENTIFIED BY 'senha_segura';
+
+-- Concede todas as permissões no banco de dados banco_mock para o novo usuário
+GRANT ALL PRIVILEGES ON banco_mock.* TO 'novo_usuario'@'localhost';
+
+-- Aplica as alterações
+FLUSH PRIVILEGES;
+
 USE banco_mock;
 
 -- Cria a tabela de usuários
@@ -9,6 +19,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     usuario_id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
+    cpf BIGINT NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
     telefone VARCHAR(15),
     endereco VARCHAR(255),
@@ -59,10 +70,7 @@ CREATE TABLE IF NOT EXISTS mensagens (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id)
 );
 
-
-use banco_mock;
-
-INSERT INTO usuarios (nome, email, senha, telefone, endereco, data_nascimento) VALUES
+INSERT INTO usuarios (nome, email, senha, cpf, telefone, endereco, data_nascimento) VALUES
 ('João Silva', 'joao.silva@example.com', 'senha123', '11999999999', 'Rua A, 123', '1990-01-01'),
 ('Maria Oliveira', 'maria.oliveira@example.com', 'senha456', '21999999999', 'Rua B, 456', '1985-05-05'),
 ('Carlos Souza', 'carlos.souza@example.com', 'senha789', '31999999999', 'Rua C, 789', '1992-03-03');
@@ -90,12 +98,3 @@ INSERT INTO mensagens (chat_id, usuario_id, tipo_usuario, mensagem, data_envio) 
 (2, 2, 'bot', 'Você pode fazer uma transferência pelo nosso aplicativo.', '2023-06-02 11:31:00'),
 (3, 1, 'cliente', 'Qual é o saldo da minha conta?', '2024-07-01 08:00:00'),
 (3, 1, 'bot', 'Seu saldo é de R$ 500,00.', '2024-07-01 08:01:00');
-
--- Cria um novo usuário
-CREATE USER 'novo_usuario'@'localhost' IDENTIFIED BY 'senha_segura';
-
--- Concede todas as permissões no banco de dados banco_mock para o novo usuário
-GRANT ALL PRIVILEGES ON banco_mock.* TO 'novo_usuario'@'localhost';
-
--- Aplica as alterações
-FLUSH PRIVILEGES;

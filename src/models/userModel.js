@@ -2,7 +2,13 @@ var database = require('../database/config');
 
 // Login
 function login(username, password) {
-  var query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
+  var query = `SELECT * FROM usuarios WHERE nome = '${username}' AND senha = '${password}'`;
+  return database.execute(query);
+}
+
+// Detalhes do usuário por CPF
+function detailByCPF(CPF){
+  var query = `SELECT * FROM usuarios WHERE cpf = '${CPF}';`
   return database.execute(query);
 }
 
@@ -44,6 +50,7 @@ function remove(id){
 
 module.exports = {
   login,
+  detailByCPF,
   detailByEmail,
   detailById,
   detailByPhone,
