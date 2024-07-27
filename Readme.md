@@ -1,4 +1,4 @@
-# Chat-Bot System
+# Chat-Bot
 
 Este repositório contém um exemplo de sistema de chat-bot desenvolvido com Node.js no padrão MVC para o backend, React para o frontend e MySQL como banco de dados. Todos os componentes são executados em contêineres Docker conectados via Docker Compose.
 
