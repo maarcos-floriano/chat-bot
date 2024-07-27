@@ -7,7 +7,8 @@ export const get = (params) => {
                 }
             })
             .then(response => {
-                if (response.ok) return response.json();
+                if (response.ok) return response.json(); 
+                return response;
             }
         )
     } catch (error) {
@@ -26,7 +27,7 @@ export const post = (params, bodyJson) => {
                 body: JSON.stringify(bodyJson)
             })
             .then(response => {
-                if (response.ok) return response.json();
+                return response.json();
             }
         )
     } catch (error) {

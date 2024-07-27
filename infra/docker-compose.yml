@@ -23,6 +23,7 @@ services:
       DB_DATABASE: banco_mock
       DB_USER: novo_usuario
       DB_PASSWORD: senha_segura
+    command: nodemon src/seuArquivo.js
     depends_on:
       - mysql-db
     networks:

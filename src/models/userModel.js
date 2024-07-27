@@ -32,7 +32,7 @@ function detailByPhone(phone){
 
 // Criar usuário
 function create(user){
-  var query = `INSERT INTO usuarios (nome, email, telefone, senha) VALUES ('${user.name}', '${user.email}', '${user.phone}', '${user.password}');`
+  var query = `INSERT INTO usuarios (cpf, email, senha) VALUES ('${user.cpf}', '${user.email}', '${user.senha}');`
   return database.execute(query);
 }
 

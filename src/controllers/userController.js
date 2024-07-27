@@ -29,10 +29,8 @@ function detailByCPF(req, res) {
   userModel.detailByCPF(cpf)
     .then((result) => {
 
-      if (result.length > 0) {
+      if (result.length >= 0) {
         res.status(200).send(result);
-      } else {
-        res.status(404).send('Usuário não encontrado!');
       }
 
     })
@@ -50,10 +48,8 @@ function detailByEmail(req, res) {
   userModel.detailByEmail(email)
     .then((result) => {
 
-      if (result.length > 0) {
+      if (result.length >= 0) {
         res.status(200).send(result);
-      } else {
-        res.status(404).send('Usuário não encontrado!');
       }
 
     })
@@ -109,21 +105,20 @@ function detailByPhone(req, res) {
 function create(req, res) {
 
   var user = {
-    name: req.body.name,
+    cpf: req.body.cpf,
     email: req.body.email,
-    phone: req.body.phone,
-    password: req.body.password
+    senha: req.body.senha
   };
 
   userModel.create(user)
-    .then((result) => {
+    .then(result => {
 
-      res.status(201).send('Usuário criado com sucesso!');
+      res.status(201).send(result);
 
     })
     .catch((error) => {
 
-      res.status(500).send('Erro ao criar usuário: ' + error);
+      res.status(500).send(error.sqlState);
 
     });
 }

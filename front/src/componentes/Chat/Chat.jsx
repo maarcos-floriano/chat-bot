@@ -4,17 +4,19 @@ import { get, post } from "../../utils/Fetch";
 import './Chat.css';
 
 function Chat() {
-    const [questions] = useState([
+    const [questions, setQuestions] = useState([
         {question: "Olá, tudo bem ?"},
         {question: "Como podemos te ajudar ?", options: ["Informações de transação", "Informações de conta", "Informações de perfil"]},
         {question: "Informe-nos seu cpf -"},
-        {question: "Informe-nos seu email -"},
+        {question: "Esse email não corresponse ao CPF:: "},
+        {question: "Nenhum registro encontrado do CPF:: "},
         {question: "Mensagem não reconhecida !"}
     ]);
     const [messages, setMessages] = useState([]);
     const [response, setResponse] = useState('');
     const [input, setInput] = useState('');
     const [user, setUser] = useState({});
+    const [option, setOption] = useState({});
     
     useEffect(() => {
         setMessages([
@@ -33,6 +35,22 @@ function Chat() {
             reset()
         }
     }, [response]);
+
+    useEffect(() => {
+        if (user.usuario_id) {
+            setQuestions(prevQuestions => verifQuestions(prevQuestions, { question: "Processando..." }));
+        } else {
+            setQuestions(prevQuestions => verifQuestions(prevQuestions, { question: "Informe-nos seu email -" }));
+        }
+    }, [user]);
+
+    const verifQuestions = (objeto, body) => {
+        const exist = objeto.some(prevObject => JSON.stringify(prevObject) == JSON.stringify(body));
+        if (!exist) {
+            return [ ...objeto, body ];
+        }
+        return objeto;
+    }
 
     const initBotMessages = () => {
         setMessages(prevMessages => [
@@ -58,17 +76,104 @@ function Chat() {
         setResponse('');
     }
 
-    const obter = async (param) => {
+    const obterUser = async (param) => {
         let usuario = await get(param);
-        setUser(usuario);
+        if (usuario.length == 0) {
+            setUser(usuario[0]);
+        }
+        return usuario[0];
     }
 
-    // const criar = async (param, body) => {
-    //     let usuario = await post(param, body);
-    //     setUser(usuario);
-    // }
+const obter = async (param) => {
+        return await get(param);
+    }
 
-    const solicitar = () => {
+    const criar = async (param, body) => {
+        let usuario = await post(param, body);
+        if (usuario.ok) {
+            setUser(usuario);
+        } else if (usuario == 23000) {
+            setMessages(prevMessages => [
+                ...prevMessages,
+                { sender: 'bot', text: questions[3].question }
+            ]);
+        }
+    }
+
+    const createUser = () => {
+        const objectUser =  {cpf: user.cpf, email: response, senha: user.cpf.slice(7)};
+        criar('user/create', objectUser);
+    }
+
+    const showInfo = () => {
+
+    }
+
+    const showError = () => {
+        setMessages(prevMessages => [
+            ...prevMessages,
+            { sender: 'bot', text: questions[5].question }
+        ]); 
+        const timeout = setTimeout(() => {
+            initBotMessages();
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }
+
+    const formatJson = (jsonObject) => {
+        const keys = Object.keys(jsonObject);
+        const result = [];
+        for (const key of keys) {
+            if (key != "conta_id" && key != "usuario_id") {
+                result.push(key.replace('_', ' ') + '- ' + jsonObject[key]);
+            }
+        }
+        return result;
+    }
+
+    const verifOption = async (dataUser) => {
+        let url;
+        const email = dataUser.email ? dataUser.email : '';
+        switch (option) {
+            case 'Conta':
+                url = `account/findAllByUserEmail/${email}`;
+                break;
+            case 'Perfil':
+                url = `user/detailByCpf/${email}`;
+                break;
+            case 'Transação':
+                url = `transaction/findByUserEmail/${email}`;         
+                break;
+            default:
+                break;
+        };
+        const datas = await obter(url);
+
+        if (datas) {
+            for (const data of datas) {
+                const result = formatJson(data);
+
+                setMessages(prevMessages => [
+                    ...prevMessages,
+                    { sender: 'bot', text: result }
+                ]);
+            }
+        } else {
+            setMessages(prevMessages => [
+                ...prevMessages,
+                { sender: 'bot', text: questions[4].question + dataUser.cpf }
+            ]);
+        }
+
+        setMessages(prevMessages => [
+            ...prevMessages,
+            { sender: 'bot', text: questions[1].options }
+        ]);
+
+    }
+
+    const solicitar = async () => {
         const regexEmail = /^[a-zA-Z]+[^@]*@[a-zA-Z]+[^@]*\.[a-zA-Z]+[^@]*$/;
         const regexCpf = /^\d{11}$/;
 
@@ -76,14 +181,17 @@ function Chat() {
             response.toLowerCase().includes('transação') || response.toLowerCase().includes('transacao') ||
             response.toLowerCase().includes('conta') || response.toLowerCase().includes('perfil')
         ) {
-            setMessages(prevMessages => [
-                ...prevMessages,
-                { sender: 'bot', text: questions[2].question }
-            ]); 
+            if (user.cpf && user.email) {
+                verifOption();
+            } else {
+                setMessages(prevMessages => [
+                    ...prevMessages,
+                    { sender: 'bot', text: questions[2].question }
+                ]);
+            } 
+            
         } else if (regexCpf.test(response)) {
-            const data = obter('user/detailByCpf/12345678901');
-
-            console.log(data)
+            const data = await obterUser(`user/detailByCpf/${response}`);
 
             if (!data) {
                 setUser(prevUser => ({
@@ -92,30 +200,20 @@ function Chat() {
                 }));
                 setMessages(prevMessages => [
                     ...prevMessages,
-                    { sender: 'bot', text: questions[3].question }
+                    { sender: 'bot', text: questions[6].question }
                 ]); 
+            } else {
+                verifOption(data);
             }
         } else if (regexEmail.test(response)) {
-            // const data = criar('user/create', user);
-            console.log("User")
-            console.log(user)
-            if (user.nome == undefined) {
-                setUser(prevUser => ({
-                    ...prevUser,
-                    email: response
-                }));
+            if (user.usuario_id) { 
+                console.log('legal');
+            } else {
+                createUser();
             }
-            console.log('legal');
+            verifOption();
         } else {
-            setMessages(prevMessages => [
-                ...prevMessages,
-                { sender: 'bot', text: questions[4].question }
-            ]); 
-            const timeout = setTimeout(() => {
-                initBotMessages();
-            }, 1000);
-    
-            return () => clearTimeout(timeout);
+           showError(); 
         }
     }
 
@@ -128,7 +226,8 @@ function Chat() {
             { sender: 'client', text: option }
         ]);
 
-        setResponse(optionToSelect)
+        setOption(optionToSelect);
+        setResponse(optionToSelect);
     }
 
     return (
